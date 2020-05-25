@@ -4,7 +4,7 @@ import sys, os
 def space_to_underscore(string):
     """Takes a string and returns a new string with all whitespace converted
         to underscores."""
-    # Return this string
+
     new_string = ''
 
     for i in string:
@@ -17,21 +17,19 @@ def space_to_underscore(string):
 
 
 def special_to_dash(string):
-    """Takes a string and returns a new string with non-period special
-        charecters converted to hyphens."""
-    # note: this is seperated from space_to_dash() because I would like to
-    # add optional command line arguments in the future to choose not to 
-    # convert special charecters. There may be situations where this could be
-    # useful. Not sure. Will look into this and refactor if I see no use.
+    """Takes a string and returns a new string with all special
+        characters converted to hyphens excepting period, underscore,
+        and space. Enforces Unix convention of not starting filenames with
+        a hyphen."""
+
+    # Note: spaces permitted because that's for space_to_underscore() 
+    permitted_chars = ['.', '-', '_', ' ']
 
     new_string = ''
 
     for i in string:
-        # We will permit only numbers, letters, and these characters:
-        # (Note: spaces permitted because that's for space_to_underscore()) 
-        permited_chars = ['.', '-', '_', ' ']
 
-        if not i.isalnum() and not i in permited_chars:
+        if not i.isalnum() and not i in permitted_chars:
             new_string += '-'
         else:
             new_string += i
@@ -46,7 +44,7 @@ def special_to_dash(string):
 def rename(targ_dir):
     """Changes the name of all files and directories in targ_dir to comply
     with Unix/Linux naming best practices by calling space_to_underscore()
-    and special_to_dash() on all items in targ_dir."""
+    and special_to_dash() on all listings in targ_dir."""
 
     for fname in os.listdir(targ_dir):
         new_name = special_to_dash(fname)
@@ -59,6 +57,7 @@ def rename(targ_dir):
 
 
 def walk(targ_dir):
+    """Recursively walkes targ_dir, calling rename() on every listing below."""
     # Change all file and directory names to conform with Unix best practices
     rename(targ_dir)
 
