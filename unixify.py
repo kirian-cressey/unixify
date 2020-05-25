@@ -41,11 +41,24 @@ def special_to_dash(string):
 
 
 def walk(targ_dir):
-    files = []
-    dirs = []
+    # Change all file and directory names to conform with Unix best practices
+    #rename(targ_dir)
 
+    # Now get ready to take a walk
+    directories= []
+
+    # Make a list of all directories and a list of all files in target dir
+    # BROKEN: not isdir() and isfile() not recognizing item as file or dirs
     for item in os.listdir(targ_dir):
-        print(item)
+        path = os.path.join(targ_dir, item)
+
+        if os.path.isdir(path):
+            directories.append(path)
+
+    print("directories: {}".format(directories))
+
+    for directory in directories:
+        walk(directory)
 
 if __name__ == '__main__':
 
@@ -60,7 +73,6 @@ and are absolutely sure.""".format(directory)
     response = input("\nContinue?\n>>> ").lower()
 
     if response == 'y' or response == 'yes':
-        print(special_to_dash('-Pi$$a party time'))
         walk(directory)
     else:
         sys.exit()
