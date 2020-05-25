@@ -1,5 +1,6 @@
 import sys, os
 
+
 def space_to_underscore(string):
     """Takes a string and returns a new string with all whitespace converted
         to underscores."""
@@ -14,6 +15,7 @@ def space_to_underscore(string):
 
     return new_string
 
+
 def special_to_dash(string):
     """Takes a string and returns a new string with non-period special
         charecters converted to hyphens."""
@@ -26,7 +28,8 @@ def special_to_dash(string):
 
     for i in string:
         # We will permit only numbers, letters, and these characters:
-        permited_chars = ['.', '-', '_']
+        # (Note: spaces permitted because that's for space_to_underscore()) 
+        permited_chars = ['.', '-', '_', ' ']
 
         if not i.isalnum() and not i in permited_chars:
             new_string += '-'
@@ -40,15 +43,29 @@ def special_to_dash(string):
     return new_string
 
 
+def rename(targ_dir):
+    """Changes the name of all files and directories in targ_dir to comply
+    with Unix/Linux naming best practices by calling space_to_underscore()
+    and special_to_dash() on all items in targ_dir."""
+
+    for fname in os.listdir(targ_dir):
+        new_name = special_to_dash(fname)
+        new_name = space_to_underscore(new_name)
+
+        old_path = os.path.join(targ_dir, fname)
+        new_path = os.path.join(targ_dir, new_name)
+
+        os.rename(old_path, new_path)
+
+
 def walk(targ_dir):
     # Change all file and directory names to conform with Unix best practices
-    #rename(targ_dir)
+    rename(targ_dir)
 
     # Now get ready to take a walk
     directories= []
 
     # Make a list of all directories and a list of all files in target dir
-    # BROKEN: not isdir() and isfile() not recognizing item as file or dirs
     for item in os.listdir(targ_dir):
         path = os.path.join(targ_dir, item)
 
@@ -59,6 +76,7 @@ def walk(targ_dir):
 
     for directory in directories:
         walk(directory)
+
 
 if __name__ == '__main__':
 
